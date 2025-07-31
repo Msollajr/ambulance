@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drv_nav_maps"
+            android:icon="@drawable/ic_baseline_location_on_24"
+            android:title="maps" />
+
+        <item
+            android:id="@+id/drv_nav_setting"
+            android:icon="@drawable/profile"
+            android:title="profile" />
+        <item
+            android:id="@+id/drv_nav_about"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:title="about" />
+        <item
+            android:id="@+id/drv_nav_logout"
+            android:icon="@drawable/logout_ic"
+            android:title="LOGOUT" />
+
+    </group>
+</menu>

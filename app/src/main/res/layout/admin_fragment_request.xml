@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        android:id="@+id/U_profile_pic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:text="Black hacker"
+        android:textColor="#EA6D35"
+        android:id="@+id/U_nav_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/U_profile_pic"
+        android:textSize="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/U_nav_email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp"
+        android:textSize="20dp"
+        android:textColor="#EA6D35"
+        android:padding="18dp"
+        android:layout_below="@id/U_nav_name"
+        android:text="blackhacker@gmail.com"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/U_nav_phone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp"
+        android:textSize="20dp"
+        android:textColor="#EA6D35"
+        android:padding="18dp"
+        android:layout_below="@id/U_nav_email"
+        android:text="+255 765388506"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+
+</RelativeLayout>

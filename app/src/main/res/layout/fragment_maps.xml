@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?><!--<FrameLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".MapsFragment" >-->
+
+
+<!--    <Button-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/find_driver"-->
+<!--        android:text="Find ALL ambulance"-->
+<!--        android:layout_gravity="bottom"/>-->
+
+<!--<fragment-->
+<!--    android:id="@+id/map"-->
+<!--    android:name="com.google.android.gms.maps.SupportMapFragment"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent" />-->
+<!--</FrameLayout>-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapsFragment">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+
+    <TextView
+        android:id="@+id/new_msg"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10sp"
+        android:paddingTop="10sp"
+        android:paddingLeft="30sp"
+        android:textColor="@android:color/black"
+        android:text="USER NOTIFICATION" />
+
+        <Button
+            android:id="@+id/okay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26dp"
+            android:backgroundTint="#0CF416"
+            android:text="OKAY" />
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/find_driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:text="Find Driver"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#3B608C"
+        android:textSize="25dp" />
+
+    <LinearLayout
+        android:id="@+id/drivers_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/find_driver"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/driver_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:paddingLeft="30sp"
+            android:textColor="@android:color/black"
+            android:text="Driver Name" />
+
+        <TextView
+            android:id="@+id/driver_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:paddingLeft="30sp"
+            android:textColor="@android:color/black"
+            android:text="Driver Phone" />
+
+        <TextView
+            android:id="@+id/driver_email"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:textColor="@android:color/black"
+            android:paddingStart="30sp"
+            android:text="Driver Email" />
+
+        <TextView
+            android:id="@+id/driver_hospital"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:textColor="@android:color/black"
+            android:paddingStart="30sp"
+            android:text="Driver Hospital" />
+
+        <Button
+            android:id="@+id/contact_driver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="#0CF416"
+            android:layout_marginBottom="16dp"
+            android:text="Contact Driver" />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

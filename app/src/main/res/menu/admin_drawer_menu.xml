@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/adm_nav_maps"
+            android:icon="@drawable/ic_10"
+            android:title="Maps" />
+        <item
+            android:id="@+id/adm_nav_history"
+            android:icon="@drawable/ic_baseline_manage_history_24"
+            android:title="History" />
+        <item
+            android:id="@+id/adm_nav_request"
+            android:icon="@drawable/ic_baseline_request_page"
+            android:title="Requests" />
+        <item
+            android:id="@+id/add_nav_driver"
+            android:icon="@drawable/ic_person_add"
+            android:title="Add driver" />
+        <item
+            android:id="@+id/nav_view_driver"
+            android:icon="@drawable/ic_baseline_format_list"
+            android:title="View drivers" />
+        <item
+            android:id="@+id/adm_nav_setting"
+            android:icon="@drawable/name"
+            android:title="Profile" />
+        <item
+            android:id="@+id/adm_nav_logout"
+            android:icon="@drawable/logout_ic"
+            android:title="Logout" />
+
+    </group>
+</menu>
