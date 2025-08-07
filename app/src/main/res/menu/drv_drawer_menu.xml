@@ -9,20 +9,20 @@
         <item
             android:id="@+id/drv_nav_maps"
             android:icon="@drawable/ic_baseline_location_on_24"
-            android:title="maps" />
+            android:title="Maps" />
 
         <item
             android:id="@+id/drv_nav_setting"
-            android:icon="@drawable/profile"
-            android:title="profile" />
+            android:icon="@drawable/name"
+            android:title="Profile" />
         <item
             android:id="@+id/drv_nav_about"
             android:icon="@drawable/ic_baseline_info_24"
-            android:title="about" />
+            android:title="About" />
         <item
             android:id="@+id/drv_nav_logout"
             android:icon="@drawable/logout_ic"
-            android:title="LOGOUT" />
+            android:title="Logout" />
 
     </group>
 </menu>

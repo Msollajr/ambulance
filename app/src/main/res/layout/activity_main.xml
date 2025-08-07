@@ -94,6 +94,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="15dp"
+        app:cornerRadius="32dp"
         android:backgroundTint="#EA6D35"
         android:text="Login"
         android:textSize="25dp" />

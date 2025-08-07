@@ -124,6 +124,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="10dp"
+        app:cornerRadius="32dp"
         android:layout_marginBottom="15dp"
         android:backgroundTint="#3B608C"
         android:text="Register"

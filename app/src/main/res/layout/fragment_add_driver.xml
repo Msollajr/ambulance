@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:src="@drawable/top_background"
@@ -133,6 +133,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="15dp"
             android:backgroundTint="#3B608C"
+            app:cornerRadius="32dp"
             android:text="Register DRIVER"
             android:textColor="#fff"
             android:textSize="25dp" />
