@@ -5,7 +5,7 @@
 
 <!-- Animated typing SVG -->
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=FF4444&center=true&vCenter=true&multiline=true&width=700&height=80&lines=🚨+Real-Time+Ambulance+Tracking;🗺️+Google+Maps+Integration;🔔+Firebase+Push+Notifications;👨‍⚕️+Multi-Role+User+System" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=800&color=FF4444&center=true&vCenter=true&repeat=true&width=700&height=50&lines=Real-Time+Ambulance+Tracking;Google+Maps+%26+GeoFire+Integration;Firebase+Push+Notifications;Multi-Role%3A+Patient+%7C+Driver+%7C+Admin;Emergency+Response+Android+App" alt="Typing SVG" />
 </a>
 
 <br/>
