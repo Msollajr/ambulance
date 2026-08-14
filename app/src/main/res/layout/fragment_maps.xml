@@ -1,149 +1,552 @@
-<?xml version="1.0" encoding="utf-8"?><!--<FrameLayout-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".MapsFragment" >-->
-
-
-<!--    <Button-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/find_driver"-->
-<!--        android:text="Find ALL ambulance"-->
-<!--        android:layout_gravity="bottom"/>-->
-
-<!--<fragment-->
-<!--    android:id="@+id/map"-->
-<!--    android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent" />-->
-<!--</FrameLayout>-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MapsFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <!-- Full-screen map -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- TOP: Status progress bar -->
     <LinearLayout
-        android:id="@+id/notification"
+        android:id="@+id/status_bar_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_gravity="top"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:visibility="gone"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
 
+        <TextView
+            android:id="@+id/tv_status_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Searching for ambulance…"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A2E"
+            android:gravity="center"
+            android:layout_marginBottom="10dp" />
 
-    <TextView
-        android:id="@+id/new_msg"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <View android:id="@+id/dot_searching" android:layout_width="14dp"
+                    android:layout_height="14dp" android:background="@drawable/dot_active" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Searching" android:textSize="9sp" android:textColor="#888"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+            <View android:id="@+id/line_1" android:layout_width="0dp" android:layout_height="2dp"
+                android:layout_weight="1" android:background="#DDDDDD"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <View android:id="@+id/dot_assigned" android:layout_width="14dp"
+                    android:layout_height="14dp" android:background="@drawable/dot_inactive" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Assigned" android:textSize="9sp" android:textColor="#888"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+            <View android:id="@+id/line_2" android:layout_width="0dp" android:layout_height="2dp"
+                android:layout_weight="1" android:background="#DDDDDD"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <View android:id="@+id/dot_enroute" android:layout_width="14dp"
+                    android:layout_height="14dp" android:background="@drawable/dot_inactive" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="En Route" android:textSize="9sp" android:textColor="#888"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+            <View android:id="@+id/line_3" android:layout_width="0dp" android:layout_height="2dp"
+                android:layout_weight="1" android:background="#DDDDDD"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <View android:id="@+id/dot_arrived" android:layout_width="14dp"
+                    android:layout_height="14dp" android:background="@drawable/dot_inactive" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Arrived" android:textSize="9sp" android:textColor="#888"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- BOTTOM: stacked panels + main button -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:paddingBottom="10sp"
-        android:paddingTop="10sp"
-        android:paddingLeft="30sp"
-        android:textColor="@android:color/black"
-        android:text="USER NOTIFICATION" />
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/okay"
+        <!-- ETA chip -->
+        <LinearLayout
+            android:id="@+id/eta_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="26dp"
-            android:backgroundTint="#0CF416"
-            android:text="OKAY" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/eta_chip_bg"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:visibility="gone">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Ambulance arriving in "
+                android:textSize="13sp" android:textColor="#FFFFFF" android:textStyle="bold" />
+            <TextView android:id="@+id/tv_eta"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="— min" android:textSize="14sp" android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" · " android:textSize="13sp" android:textColor="#FFFFFF" />
+            <TextView android:id="@+id/tv_distance"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="— km" android:textSize="13sp" android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Notification banner -->
+        <LinearLayout
+            android:id="@+id/notification_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:elevation="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:visibility="gone">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🔔  " android:textSize="15sp" />
+                <TextView android:id="@+id/tv_notification_msg"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="Update from dispatcher"
+                    android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_okay"
+                android:layout_width="match_parent" android:layout_height="44dp"
+                android:text="OK, Got it" android:textSize="14sp" android:textColor="#FFFFFF"
+                app:backgroundTint="#27AE60" app:cornerRadius="10dp" />
+        </LinearLayout>
+
+        <!-- Driver info card -->
+        <LinearLayout
+            android:id="@+id/driver_info_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:elevation="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:visibility="gone">
+
+            <!-- Driver avatar + name row -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout android:layout_width="48dp" android:layout_height="48dp"
+                    android:background="@drawable/driver_avatar_bg" android:gravity="center">
+                    <ImageView
+                        android:id="@+id/iv_driver_photo"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_person_add" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+                    <TextView android:id="@+id/tv_driver_name"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="15sp" android:textStyle="bold"
+                        android:textColor="#1A1A2E" />
+                    <TextView android:id="@+id/tv_driver_hospital"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="12sp" android:textColor="#3B608C"
+                        android:textStyle="bold" android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <TextView android:id="@+id/tv_amb_type_badge"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="BLS" android:textSize="11sp" android:textStyle="bold"
+                    android:textColor="#FFFFFF" android:background="@drawable/badge_navy"
+                    android:paddingStart="10dp" android:paddingEnd="10dp"
+                    android:paddingTop="4dp" android:paddingBottom="4dp" />
+            </LinearLayout>
+
+            <!-- 4-column info grid: phone / severity / plate / cost -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:background="#F7F8FA"
+                android:padding="10dp" android:layout_marginBottom="12dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="PHONE" android:textSize="10sp" android:textColor="#888"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/tv_driver_phone"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="11sp" android:textStyle="bold"
+                        android:textColor="#1A1A2E" android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="match_parent"
+                    android:background="#DDDDDD" />
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="SEVERITY" android:textSize="10sp" android:textColor="#888"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/tv_severity_display"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="12sp" android:textStyle="bold"
+                        android:textColor="#E74C3C" android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="match_parent"
+                    android:background="#DDDDDD" />
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="PLATE" android:textSize="10sp" android:textColor="#888"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/tv_amb_plate"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="11sp" android:textStyle="bold"
+                        android:textColor="#1A1A2E" android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="match_parent"
+                    android:background="#DDDDDD" />
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="COST" android:textSize="10sp" android:textColor="#888"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/tv_amb_cost"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textSize="11sp" android:textStyle="bold"
+                        android:textColor="#EA6D35" android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Insurance info — shown only when patient has insurance -->
+            <TextView
+                android:id="@+id/tv_driver_insurance"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textSize="12sp" android:textColor="#3B608C"
+                android:background="#EEF4FF" android:padding="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel_request"
+                android:layout_width="match_parent" android:layout_height="44dp"
+                android:text="Cancel Request" android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#E74C3C" app:cornerRadius="10dp" />
+        </LinearLayout>
+
+        <!-- Main action button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_find_driver"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Request Ambulance"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#3B608C"
+            app:cornerRadius="32dp" />
     </LinearLayout>
-    
-    <Button
-        android:id="@+id/find_driver"
+
+    <!-- REQUEST MODAL overlay — wrapped in NestedScrollView so it scrolls on small phones -->
+    <!-- Photo preview + Confirm button always visible regardless of screen size -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/request_modal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:text="Find Driver"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="32dp"
-        app:cornerRadius="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#3B608C"
-        android:textSize="25dp" />
+        android:layout_gravity="bottom"
+        android:background="@drawable/modal_bg"
+        android:elevation="20dp"
+        android:visibility="gone"
+        android:fillViewport="true">
 
-    <LinearLayout
-        android:id="@+id/drivers_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/find_driver"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/driver_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:paddingBottom="10sp"
-            android:paddingTop="10sp"
-            android:paddingLeft="30sp"
-            android:textColor="@android:color/black"
-            android:text="Driver Name" />
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp">
 
-        <TextView
-            android:id="@+id/driver_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:paddingBottom="10sp"
-            android:paddingTop="10sp"
-            android:paddingLeft="30sp"
-            android:textColor="@android:color/black"
-            android:text="Driver Phone" />
+            <View android:layout_width="40dp" android:layout_height="4dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#CCCCCC" android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/driver_email"
-            android:layout_width="match_parent"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10sp"
-            android:paddingTop="10sp"
-            android:textColor="@android:color/black"
-            android:paddingStart="30sp"
-            android:text="Driver Email" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Request Ambulance" android:textSize="18sp" android:textStyle="bold"
+                android:textColor="#1A1A2E" android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:id="@+id/driver_hospital"
-            android:layout_width="match_parent"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10sp"
-            android:paddingTop="10sp"
-            android:textColor="@android:color/black"
-            android:paddingStart="30sp"
-            android:text="Driver Hospital" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Choose type and describe the emergency"
+                android:textSize="13sp" android:textColor="#888888" android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/contact_driver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="#0CF416"
-            android:layout_marginBottom="16dp"
-            android:text="Contact Driver" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Ambulance type" android:textSize="13sp" android:textStyle="bold"
+                android:textColor="#1A1A2E" android:layout_marginBottom="8dp" />
 
-    </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="16dp">
 
+                <LinearLayout android:id="@+id/btn_type_basic"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="@drawable/type_card_selected"
+                    android:gravity="center" android:padding="12dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🚑" android:textSize="26sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Basic (BLS)" android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="#1A1A2E" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="First aid + transport" android:textSize="10sp"
+                        android:textColor="#666666" android:gravity="center"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
 
+                <LinearLayout android:id="@+id/btn_type_advanced"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="@drawable/type_card_unselected"
+                    android:gravity="center" android:padding="12dp"
+                    android:layout_marginStart="6dp"
+                    android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🏥" android:textSize="26sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Advanced (ALS)" android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="#1A1A2E" android:layout_marginTop="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Paramedics + IV drugs" android:textSize="10sp"
+                        android:textColor="#666666" android:gravity="center"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
 
-</RelativeLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Severity" android:textSize="13sp" android:textStyle="bold"
+                android:textColor="#1A1A2E" android:layout_marginBottom="8dp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sev_low"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:layout_marginEnd="3dp" android:text="Low" android:textSize="11sp"
+                    android:textColor="#27AE60" app:backgroundTint="#EAF7EF"
+                    app:strokeColor="#27AE60" app:strokeWidth="1.5dp" app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sev_medium"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:layout_marginStart="3dp" android:layout_marginEnd="3dp"
+                    android:text="Medium" android:textSize="11sp" android:textColor="#E67E22"
+                    app:backgroundTint="#FEF9E7" app:strokeColor="#E67E22"
+                    app:strokeWidth="1.5dp" app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sev_high"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:layout_marginStart="3dp" android:layout_marginEnd="3dp"
+                    android:text="High" android:textSize="11sp" android:textColor="#E74C3C"
+                    app:backgroundTint="#FDEDEC" app:strokeColor="#E74C3C"
+                    app:strokeWidth="1.5dp" app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sev_critical"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:layout_marginStart="3dp" android:text="Critical" android:textSize="11sp"
+                    android:textColor="#FFFFFF" app:backgroundTint="#E74C3C"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Description (optional)" android:textSize="13sp" android:textStyle="bold"
+                android:textColor="#1A1A2E" android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Briefly describe the emergency…"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#1A1A2E"
+                android:textSize="14sp"
+                android:padding="12dp"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="14dp" />
+
+            <!-- Photo attach section -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_attach_photo"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content" android:layout_height="40dp"
+                    android:text="📷 Add Photo"
+                    android:textSize="13sp" android:textColor="#3B608C"
+                    app:strokeColor="#3B608C" app:strokeWidth="1.5dp"
+                    app:cornerRadius="8dp" android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:id="@+id/tv_photo_label"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Optional — attach scene photo"
+                    android:textSize="12sp" android:textColor="#888888" />
+            </LinearLayout>
+
+            <!-- Photo preview — hidden until photo selected -->
+            <ImageView
+                android:id="@+id/iv_photo_preview"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop"
+                android:background="#F0F0F0"
+                android:layout_marginBottom="14dp"
+                android:visibility="gone" />
+
+            <!-- ── Insurance section ────────────────────────────────────────── -->
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="#EEEEEE"
+                android:layout_marginTop="4dp" android:layout_marginBottom="12dp" />
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Do you have health insurance?"
+                android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A2E"
+                android:layout_marginBottom="8dp" />
+
+            <RadioGroup android:id="@+id/rg_insurance"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="10dp">
+
+                <RadioButton android:id="@+id/rb_insurance_no"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="No"
+                    android:textSize="14sp" android:textColor="#1A1A2E" android:checked="true" />
+
+                <RadioButton android:id="@+id/rb_insurance_yes"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="Yes"
+                    android:textSize="14sp" android:textColor="#1A1A2E" />
+            </RadioGroup>
+
+            <LinearLayout android:id="@+id/insurance_details_panel"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:background="#F7F8FA"
+                android:padding="12dp" android:layout_marginBottom="12dp"
+                android:visibility="gone">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Insurance Company"
+                    android:textSize="12sp" android:textStyle="bold" android:textColor="#1A1A2E"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText android:id="@+id/et_insurance_company"
+                    android:layout_width="match_parent" android:layout_height="48dp"
+                    android:background="@drawable/edittext_background"
+                    android:hint="e.g. NHIF, Jubilee, AAR"
+                    android:textColorHint="#AAAAAA" android:textColor="#1A1A2E"
+                    android:textSize="14sp" android:padding="12dp"
+                    android:inputType="textCapWords" android:layout_marginBottom="12dp" />
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Insurance Number / Policy ID"
+                    android:textSize="12sp" android:textStyle="bold" android:textColor="#1A1A2E"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText android:id="@+id/et_insurance_number"
+                    android:layout_width="match_parent" android:layout_height="48dp"
+                    android:background="@drawable/edittext_background"
+                    android:hint="e.g. NHIF-123456789"
+                    android:textColorHint="#AAAAAA" android:textColor="#1A1A2E"
+                    android:textSize="14sp" android:padding="12dp"
+                    android:inputType="text" />
+            </LinearLayout>
+            <!-- ── End insurance section ─────────────────────────────────────── -->
+
+            <!-- Confirm button — ALWAYS at bottom, always visible after scroll -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_confirm_request"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Find Organization"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#EA6D35"
+                app:cornerRadius="26dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

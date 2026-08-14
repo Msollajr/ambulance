@@ -1,11 +1,14 @@
 package com.example.mysignupapp;
 
+import com.bumptech.glide.Glide;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,15 +35,15 @@ import java.util.Locale;
 
 public class RequestsFragment extends Fragment {
 
-    // ── Data model for one request row ─────────────────────────────────────────
+    // ── Data model ─────────────────────────────────────────────────────────────
     static class RequestRow {
         String userPhone, severity, ambType, description, status, assignedDriver;
         double lat, lng, distKm;
         int    etaMin;
     }
 
-    // ── State ──────────────────────────────────────────────────────────────────
-    private String phone;           // driver's phone
+    // ── Driver state ───────────────────────────────────────────────────────────
+    private String phone;
     private String driverName;
     private String driverHospital;
     private String assignedAmbulanceId = "";
@@ -50,9 +53,9 @@ public class RequestsFragment extends Fragment {
     private double myLat = 0, myLng = 0;
 
     // ── Views ──────────────────────────────────────────────────────────────────
-    private RecyclerView     recyclerView;
-    private LinearLayout     emptyState;
-    private RequestsAdapter  adapter;
+    private RecyclerView          recyclerView;
+    private LinearLayout          emptyState;
+    private RequestsAdapter       adapter;
     private final List<RequestRow> rows = new ArrayList<>();
 
     // ── Firebase ───────────────────────────────────────────────────────────────
@@ -99,7 +102,7 @@ public class RequestsFragment extends Fragment {
     }
 
     // ══════════════════════════════════════════════════════════════════════════
-    // LOAD DRIVER + AMBULANCE PROFILE
+    // DRIVER + AMBULANCE PROFILE
     // ══════════════════════════════════════════════════════════════════════════
 
     private void loadDriverProfile() {
@@ -118,8 +121,10 @@ public class RequestsFragment extends Fragment {
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot a) {
-                                            ambulancePlate = a.child("plateNo").getValue(String.class);
-                                            ambulanceType  = a.child("type").getValue(String.class);
+                                            ambulancePlate = a.child("plateNo")
+                                                    .getValue(String.class);
+                                            ambulanceType = a.child("type")
+                                                    .getValue(String.class);
                                             Object c = a.child("costPerTrip").getValue();
                                             if (c != null)
                                                 ambulanceCost = Double.parseDouble(c.toString());
@@ -140,35 +145,40 @@ public class RequestsFragment extends Fragment {
                 LocationServices.getFusedLocationProviderClient(requireActivity());
         try {
             fused.getLastLocation().addOnSuccessListener(loc -> {
-                if (loc != null) { myLat = loc.getLatitude(); myLng = loc.getLongitude(); }
+                if (loc != null) {
+                    myLat = loc.getLatitude();
+                    myLng = loc.getLongitude();
+                }
             });
         } catch (Exception ignored) {}
     }
 
     // ══════════════════════════════════════════════════════════════════════════
-    // LISTEN TO ALL REQUESTS
+    // LISTEN TO REQUESTS
     // ══════════════════════════════════════════════════════════════════════════
 
     private void listenRequests() {
         requestsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                rows.clear();
                 List<RequestRow> pending = new ArrayList<>();
+                long total = snapshot.getChildrenCount();
+                if (total == 0) { finaliseList(pending); return; }
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    RequestRow row = new RequestRow();
-                    row.userPhone      = ds.getKey();
-                    row.severity       = ds.child("severity").getValue(String.class);
-                    row.ambType        = ds.child("ambulanceType").getValue(String.class);
-                    row.description    = ds.child("description").getValue(String.class);
-                    row.status         = ds.child("status").getValue(String.class);
+                    RequestRow row   = new RequestRow();
+                    row.userPhone    = ds.getKey();
+                    row.severity     = ds.child("severity").getValue(String.class);
+                    row.ambType      = ds.child("ambulanceType").getValue(String.class);
+                    row.description  = ds.child("description").getValue(String.class);
+                    row.status       = ds.child("status").getValue(String.class);
                     row.assignedDriver = ds.child("assignedDriver").getValue(String.class);
-
-                    if (row.status == null) continue;
-
-                    // Fetch geo location for distance calc (best effort inline)
-                    fetchGeoAndAdd(row, pending, snapshot.getChildrenCount());
+                    if (row.status == null) {
+                        pending.add(row);
+                        if (pending.size() >= total) finaliseList(pending);
+                        continue;
+                    }
+                    fetchGeoAndAdd(row, pending, total);
                 }
             }
             @Override public void onCancelled(@NonNull DatabaseError e) {}
@@ -208,17 +218,15 @@ public class RequestsFragment extends Fragment {
     }
 
     private void finaliseList(List<RequestRow> all) {
-        rows.clear();
-        // Sort: searching first, then by distance ascending
         List<RequestRow> sorted = new ArrayList<>(all);
         Collections.sort(sorted, (a, b) -> {
-            int aPriority = "searching".equals(a.status) ? 0 : 1;
-            int bPriority = "searching".equals(b.status) ? 0 : 1;
-            if (aPriority != bPriority) return aPriority - bPriority;
+            int pa = "searching".equals(a.status) ? 0 : 1;
+            int pb = "searching".equals(b.status) ? 0 : 1;
+            if (pa != pb) return pa - pb;
             return Double.compare(a.distKm, b.distKm);
         });
+        rows.clear();
         rows.addAll(sorted);
-
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
                 adapter.notifyDataSetChanged();
@@ -234,13 +242,12 @@ public class RequestsFragment extends Fragment {
 
     private void onAccept(RequestRow row) {
         if (!"searching".equals(row.status)) {
-            Toast.makeText(getActivity(), "Request no longer available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Request no longer available",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
-
         DatabaseReference reqRef = FirebaseDatabase.getInstance()
                 .getReference("requests").child(row.userPhone);
-
         reqRef.child("status").setValue("en_route");
         reqRef.child("assignedDriver").setValue(phone);
         reqRef.child("driverName").setValue(driverName != null ? driverName : phone);
@@ -251,14 +258,12 @@ public class RequestsFragment extends Fragment {
         reqRef.child("costPerTrip").setValue(ambulanceCost);
         reqRef.child("assignedAmbulanceId").setValue(assignedAmbulanceId);
         reqRef.child("acceptedAt").setValue(System.currentTimeMillis());
-
         if (!assignedAmbulanceId.isEmpty()) {
             FirebaseDatabase.getInstance().getReference("ambulances")
                     .child(assignedAmbulanceId).child("status").setValue("on_trip");
         }
-
         Toast.makeText(getActivity(),
-                "Request accepted — check the Map tab for navigation",
+                "Accepted — check the Map tab for navigation",
                 Toast.LENGTH_LONG).show();
     }
 
@@ -269,7 +274,7 @@ public class RequestsFragment extends Fragment {
     }
 
     // ══════════════════════════════════════════════════════════════════════════
-    // ADAPTER
+    // ADAPTER — with photo support
     // ══════════════════════════════════════════════════════════════════════════
 
     static class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.VH> {
@@ -301,36 +306,57 @@ public class RequestsFragment extends Fragment {
 
         static class VH extends RecyclerView.ViewHolder {
             TextView       tvSeverity, tvType, tvDistance, tvEta,
-                           tvDescription, tvStatus, tvPatient;
+                    tvDescription, tvStatus, tvPatient;
+            ImageView      ivPhoto;
             MaterialButton btnAccept, btnReject;
 
             VH(@NonNull View v) {
                 super(v);
-                tvSeverity   = v.findViewById(R.id.tv_row_severity);
-                tvType       = v.findViewById(R.id.tv_row_type);
-                tvDistance   = v.findViewById(R.id.tv_row_distance);
-                tvEta        = v.findViewById(R.id.tv_row_eta);
+                tvSeverity    = v.findViewById(R.id.tv_row_severity);
+                tvType        = v.findViewById(R.id.tv_row_type);
+                tvDistance    = v.findViewById(R.id.tv_row_distance);
+                tvEta         = v.findViewById(R.id.tv_row_eta);
                 tvDescription = v.findViewById(R.id.tv_row_description);
-                tvStatus     = v.findViewById(R.id.tv_row_status);
-                tvPatient    = v.findViewById(R.id.tv_row_patient);
-                btnAccept    = v.findViewById(R.id.btn_row_accept);
-                btnReject    = v.findViewById(R.id.btn_row_reject);
+                tvStatus      = v.findViewById(R.id.tv_row_status);
+                tvPatient     = v.findViewById(R.id.tv_row_patient);
+                ivPhoto       = v.findViewById(R.id.iv_row_photo); // ← PATCH
+                btnAccept     = v.findViewById(R.id.btn_row_accept);
+                btnReject     = v.findViewById(R.id.btn_row_reject);
             }
 
             void bind(RequestRow row, Action onAccept, Action onReject) {
-                tvPatient.setText(row.userPhone);
+                tvPatient.setText("Patient: " + row.userPhone);
                 tvSeverity.setText(row.severity != null ? row.severity : "—");
                 tvType.setText("advanced".equalsIgnoreCase(row.ambType)
                         ? "Advanced (ALS)" : "Basic (BLS)");
                 tvDistance.setText(row.distKm > 0
                         ? String.format(Locale.getDefault(), "%.1f km", row.distKm) : "—");
                 tvEta.setText(row.etaMin > 0 ? row.etaMin + " min" : "—");
-                tvDescription.setText(
-                        row.description != null && !row.description.isEmpty()
-                                && !"No description".equals(row.description)
-                                ? row.description : "");
-                tvDescription.setVisibility(
-                        tvDescription.getText().length() > 0 ? View.VISIBLE : View.GONE);
+
+                boolean hasDesc = row.description != null && !row.description.isEmpty()
+                        && !"No description".equals(row.description);
+                tvDescription.setText(hasDesc ? row.description : "");
+                tvDescription.setVisibility(hasDesc ? View.VISIBLE : View.GONE);
+
+                // Load photo from Ubuntu server via Glide — NOT Base64
+                if (ivPhoto != null) ivPhoto.setVisibility(View.GONE);
+                FirebaseDatabase.getInstance().getReference("requests")
+                        .child(row.userPhone).child("photoUrl")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot ds) {
+                                String url = ds.getValue(String.class);
+                                if (url != null && !url.isEmpty() && ivPhoto != null) {
+                                    Glide.with(ivPhoto.getContext())
+                                            .load(url)
+                                            .placeholder(android.R.color.darker_gray)
+                                            .centerCrop()
+                                            .into(ivPhoto);
+                                    ivPhoto.setVisibility(View.VISIBLE);
+                                }
+                            }
+                            @Override public void onCancelled(@NonNull DatabaseError e) {}
+                        });
 
                 // Status badge
                 String st = row.status != null ? row.status : "searching";
@@ -370,11 +396,8 @@ public class RequestsFragment extends Fragment {
                         break;
                 }
 
-                // Severity colour on badge
-                int sColor = severityColor(row.severity);
                 tvSeverity.setBackgroundTintList(
-                        android.content.res.ColorStateList.valueOf(sColor));
-
+                        android.content.res.ColorStateList.valueOf(severityColor(row.severity)));
                 btnAccept.setOnClickListener(v -> onAccept.run(row));
                 btnReject.setOnClickListener(v -> onReject.run(row));
             }

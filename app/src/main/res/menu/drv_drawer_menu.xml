@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- res/menu/drv_drawer_menu.xml — replace your existing file -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn = "navigation_view">
-
+    tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/drv_nav_maps"
-            android:icon="@drawable/ic_baseline_location_on_24"
-            android:title="Maps" />
+            android:icon="@drawable/ic_10"
+            android:title="Map" />
+
+        <!-- NEW: Requests tab -->
+        <item
+            android:id="@+id/drv_nav_requests"
+            android:icon="@drawable/ic_baseline_request_page"
+            android:title="Requests 🆘" />
+
+        <item
+            android:id="@+id/drv_nav_about"
+            android:icon="@drawable/ic_baseline_format_list"
+            android:title="About" />
 
         <item
             android:id="@+id/drv_nav_setting"
             android:icon="@drawable/name"
             android:title="Profile" />
-        <item
-            android:id="@+id/drv_nav_about"
-            android:icon="@drawable/ic_baseline_info_24"
-            android:title="About" />
+
         <item
             android:id="@+id/drv_nav_logout"
             android:icon="@drawable/logout_ic"

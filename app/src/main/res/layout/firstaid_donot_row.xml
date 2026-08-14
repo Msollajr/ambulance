@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- firstaid_donot_row.xml  — inflate one per do-not inside donots_container -->
+<!-- firstaid_donot_row.xml — one "do not" row in first aid detail -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="10dp"
     android:gravity="top">
 
     <TextView
@@ -23,7 +23,10 @@
         android:layout_weight="1"
         android:textSize="14sp"
         android:textColor="#7B241C"
-        android:lineSpacingExtra="3dp"
+        android:lineSpacingExtra="4dp"
+        android:lineSpacingMultiplier="1.2"
+        android:maxLines="100"
+        android:ellipsize="none"
         android:text="Do NOT put anything in the person's mouth." />
 
 </LinearLayout>

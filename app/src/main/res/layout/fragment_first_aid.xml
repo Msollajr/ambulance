@@ -68,7 +68,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@null"
                 android:hint="Search tips… e.g. CPR, burns, choking"
-                android:hintTextColor="#AAAAAA"
+                android:textColorHint="#AAAAAA"
                 android:textColor="#1A1A2E"
                 android:textSize="15sp"
                 android:inputType="text"

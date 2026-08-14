@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +24,7 @@ public class FirstAidFragment extends Fragment implements FirstAidAdapter.OnTipC
     private FirstAidAdapter adapter;
     private EditText etSearch;
     private ChipGroup chipGroup;
-    private TextView tvNoResults;
+    private View tvNoResults;          // ← was TextView, but the XML element is a LinearLayout
 
     private String activeCategory = "All";
     private String activeQuery    = "";
@@ -63,28 +62,51 @@ public class FirstAidFragment extends Fragment implements FirstAidAdapter.OnTipC
             chip.setText(cat);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(false);
-            chip.setChipBackgroundColorResource(R.color.chip_state_list);
-            chip.setTextColor(getResources().getColorStateList(R.color.chip_text_state_list, null));
-            chip.setChipStrokeColorResource(R.color.chip_stroke_state_list);
-            chip.setChipStrokeWidth(1.5f);
             chip.setTextSize(13f);
-            chip.setPaddingRelative(16, 0, 16, 0);
+            chip.setChipStrokeWidth(1.5f);
 
-            if (cat.equals("All")) chip.setChecked(true);
+            // Style checked vs unchecked using direct color values
+            // (avoids dependency on res/color/ selector files)
+            chip.setChipBackgroundColorResource(android.R.color.white);
+            chip.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
+            chip.setChipStrokeColor(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#CCCCCC")));
+
+            if (cat.equals("All")) {
+                chip.setChecked(true);
+                chip.setChipBackgroundColor(
+                        android.content.res.ColorStateList.valueOf(
+                                android.graphics.Color.parseColor("#3B608C")));
+                chip.setTextColor(android.graphics.Color.WHITE);
+            }
+
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    chip.setChipBackgroundColor(
+                            android.content.res.ColorStateList.valueOf(
+                                    android.graphics.Color.parseColor("#3B608C")));
+                    chip.setTextColor(android.graphics.Color.WHITE);
+                    chip.setChipStrokeColor(
+                            android.content.res.ColorStateList.valueOf(
+                                    android.graphics.Color.parseColor("#3B608C")));
+                    activeCategory = chip.getText().toString();
+                    applyFilters();
+                } else {
+                    chip.setChipBackgroundColor(
+                            android.content.res.ColorStateList.valueOf(
+                                    android.graphics.Color.WHITE));
+                    chip.setTextColor(android.graphics.Color.parseColor("#756C6C"));
+                    chip.setChipStrokeColor(
+                            android.content.res.ColorStateList.valueOf(
+                                    android.graphics.Color.parseColor("#CCCCCC")));
+                }
+            });
 
             chipGroup.addView(chip);
         }
 
         chipGroup.setSingleSelection(true);
-        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (!checkedIds.isEmpty()) {
-                Chip selected = group.findViewById(checkedIds.get(0));
-                if (selected != null) {
-                    activeCategory = selected.getText().toString();
-                    applyFilters();
-                }
-            }
-        });
 
         // ── Search ────────────────────────────────────────────────────────────
         etSearch.addTextChangedListener(new TextWatcher() {

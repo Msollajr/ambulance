@@ -84,11 +84,10 @@ public class AddDriverFragment extends Fragment {
             reference.child(phone).setValue(helperClass)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getActivity(), "Driver added successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), AdminMap.class);
-                        intent.putExtra("org_name", Admin_org);
-                        intent.putExtra("phone", Admin_phone);
-                        startActivity(intent);
-                        requireActivity().finish();
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_container, new AdminMap())
+                                .commit();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(getActivity(), "Failed to add driver: " + e.getMessage(), Toast.LENGTH_SHORT).show();

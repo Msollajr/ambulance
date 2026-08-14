@@ -11,4 +11,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#3B608C</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- ── NEW: First Aid severity stripe / badge colors ── -->
+    <color name="severity_critical">#E74C3C</color>
+    <color name="severity_high">#E67E22</color>
+    <color name="severity_medium">#F1C40F</color>
+    <color name="severity_low">#27AE60</color>
+
+    <!-- ── NEW: Chip selector colors (used in code via ColorStateList) ── -->
+    <color name="chip_checked_bg">#3B608C</color>
+    <color name="chip_unchecked_bg">#FFFFFF</color>
+    <color name="chip_checked_text">#FFFFFF</color>
+    <color name="chip_unchecked_text">#3B608C</color>
+    <color name="chip_checked_stroke">#3B608C</color>
+    <color name="chip_unchecked_stroke">#CCCCCC</color>
+
 </resources>

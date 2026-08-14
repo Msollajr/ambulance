@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- firstaid_step_row.xml  — inflate one per step inside steps_container -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    firstaid_step_row.xml
+    Uses CardView instead of LinearLayout+shape so text NEVER gets clipped.
+    CardView always grows to wrap its content — no half-line cutoff.
+-->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/step_row_bg"
-    android:padding="12dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardPreventCornerOverlap="false">
 
-    <!-- Step number circle -->
-    <TextView
-        android:id="@+id/tv_step_number"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:background="@drawable/step_number_circle"
-        android:gravity="center"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:text="1" />
-
-    <!-- Step instruction -->
-    <TextView
-        android:id="@+id/tv_step_text"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="12dp"
-        android:textSize="14sp"
-        android:textColor="#1A1A2E"
-        android:lineSpacingExtra="3dp"
-        android:text="Check the scene is safe, then check if the person is responsive." />
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="top">
 
-</LinearLayout>
+        <!-- Step number circle — anchored to top so it stays at top on multi-line text -->
+        <TextView
+            android:id="@+id/tv_step_number"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/step_number_circle"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:text="1" />
+
+        <!-- Step text — no maxLines, no ellipsize, height=wrap_content -->
+        <TextView
+            android:id="@+id/tv_step_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:textSize="14sp"
+            android:textColor="#1A1A2E"
+            android:includeFontPadding="true"
+            android:paddingTop="2dp"
+            android:paddingBottom="6dp"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.0"
+            android:breakStrategy="high_quality"
+            android:hyphenationFrequency="normal"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

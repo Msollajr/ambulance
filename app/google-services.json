@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "320742095342",
+    "firebase_url": "https://ambulance-5d459-default-rtdb.firebaseio.com",
+    "project_id": "ambulance-5d459",
+    "storage_bucket": "ambulance-5d459.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320742095342:android:69563279b2fd526d1cf6ff",
+        "android_client_info": {
+          "package_name": "com.example.mysignupapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320742095342-1fts0oh71ghtclrggcp42vvaikmgc4le.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mysignupapp",
+            "certificate_hash": "20c31ff10ea27a87341f5661163b1e99e89ecaf7"
+          }
+        },
+        {
+          "client_id": "320742095342-tt0v1bmdl6mpv50dlhhk99m87c5s2cac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD02ZYiX0h_9dKBOTc18XF33DFSg4UHBXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320742095342-tt0v1bmdl6mpv50dlhhk99m87c5s2cac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

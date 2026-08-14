@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.widget.LinearLayout;
 
 public class ManageAmbulancesFragment extends Fragment
         implements AmbulanceAdapter.OnAmbulanceClick {
@@ -51,7 +52,7 @@ public class ManageAmbulancesFragment extends Fragment
     // ── Views ─────────────────────────────────────────────────────────────────
     private AmbulanceAdapter adapter;
     private RecyclerView recyclerView;
-    private TextView tvEmpty;
+    private LinearLayout tvEmpty;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -213,8 +214,8 @@ public class ManageAmbulancesFragment extends Fragment
     }
 
     private void saveAmbulance(@Nullable Ambulance_model existing,
-                                String plate, String type, String equip,
-                                String notes, double cost, String status) {
+                               String plate, String type, String equip,
+                               String notes, double cost, String status) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ambulances");
 
         String key = existing != null ? existing.getAmbulanceId() : ref.push().getKey();

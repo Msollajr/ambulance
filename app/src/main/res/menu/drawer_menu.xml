@@ -10,6 +10,12 @@
             android:id="@+id/nav_maps"
             android:icon="@drawable/ic_10"
             android:title="maps" />
+        <!-- ── NEW First Aid item ── -->
+        <item
+            android:id="@+id/nav_first_aid"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:title="First Aid Guide 🩺" />
+
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/name"

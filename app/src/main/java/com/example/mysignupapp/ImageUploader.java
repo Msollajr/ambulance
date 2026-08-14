@@ -166,8 +166,8 @@ public class ImageUploader {
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", "photo.jpg",
-                        RequestBody.create(imageBytes,
-                                MediaType.parse(mimeType)));
+                        RequestBody.create(MediaType.parse(mimeType),
+                                imageBytes));
 
         // Add extra params in pairs: [key, value, key, value, ...]
         for (int i = 0; i + 1 < extraParams.length; i += 2) {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Active trip buttons for fragment_driver_maps.xml
+    All buttons start GONE — showTripButtons() controls which appear per phase:
+    
+    Phase "on_the_way":        → [ON THE WAY] visible
+    Phase "arrived_waiting":   → [ARRIVED AT PATIENT] visible  
+    Phase "arrived_at_client": → [GOING TO HOSPITAL] + [END ROUTE] visible
+    Phase "going_to_hospital": → [END ROUTE] visible
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Phase 1: Driver heading to patient → confirm they're on the way -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_on_the_way"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="🚑  ON THE WAY"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#3B608C"
+        app:cornerRadius="10dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Phase 2: Driver said on the way → confirm arrived at patient -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_arrived"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="✅  ARRIVED AT PATIENT"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#27AE60"
+        app:cornerRadius="10dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Phase 3a: Driver at patient → take to hospital -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_going_hospital"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="🏥  GOING TO HOSPITAL"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#EA6D35"
+        app:cornerRadius="10dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Phase 3b/4: End the entire route -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_end_route"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="🔚  END ROUTE"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#7F8C8D"
+        app:cornerRadius="10dp"
+        android:visibility="gone" />
+
+</LinearLayout>

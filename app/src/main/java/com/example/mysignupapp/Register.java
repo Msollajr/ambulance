@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,164 +23,155 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
 
-    EditText Upassword, Uphone, Uname, Uemail;
-    TextView goto_log, goto_admin;
-    ImageView togglePassword;
-    boolean isPasswordVisible = false;
-    DatabaseReference reference;
+    // ── Firebase ──────────────────────────────────────────────────────────────
+    private FirebaseAuth mAuth;
+    private DatabaseReference dbRef;
+
+    // ── Views ─────────────────────────────────────────────────────────────────
+    private EditText Upassword, Uphone, Uname, Uemail;
+    private TextView goto_log, goto_admin;
+    private ImageView togglePassword;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize Views
-        Upassword = findViewById(R.id.password);
-        Uphone = findViewById(R.id.Phone);
-        Uname = findViewById(R.id.username);
-        Uemail = findViewById(R.id.email);
-        goto_log = findViewById(R.id.log_here);
-        goto_admin = findViewById(R.id.goto_admin);
+        mAuth  = FirebaseAuth.getInstance();
+        dbRef  = FirebaseDatabase.getInstance().getReference("users");
+
+        Upassword     = findViewById(R.id.password);
+        Uphone        = findViewById(R.id.Phone);
+        Uname         = findViewById(R.id.username);
+        Uemail        = findViewById(R.id.email);
+        goto_log      = findViewById(R.id.log_here);
+        goto_admin    = findViewById(R.id.goto_admin);
         togglePassword = findViewById(R.id.togglePasswordVisibility);
         MaterialButton reg_btn = findViewById(R.id.registerbtn);
 
-        // Show/Hide Password
-        togglePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isPasswordVisible) {
-                    // Hide password
-                    Upassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    togglePassword.setImageResource(R.drawable.visibility_off_24); // closed eye icon
-                } else {
-                    // Show password
-                    Upassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    togglePassword.setImageResource(R.drawable.visibility_24); // open eye icon
-                }
-                isPasswordVisible = !isPasswordVisible;
-                Upassword.setSelection(Upassword.getText().length()); // keep cursor at end
+        // ── Password toggle ────────────────────────────────────────────────────
+        togglePassword.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                Upassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                togglePassword.setImageResource(R.drawable.visibility_off_24);
+            } else {
+                Upassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                togglePassword.setImageResource(R.drawable.visibility_24);
             }
+            isPasswordVisible = !isPasswordVisible;
+            Upassword.setSelection(Upassword.getText().length());
         });
 
-        // Register Button Click
-        reg_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateUsername() | !validateEmail() | !validatePassword() | !validatePhone()) {
-                    return;
-                }
-
-                String name = Uname.getText().toString().trim();
-                String email = Uemail.getText().toString().trim();
-                String password = Upassword.getText().toString().trim();
-                String phone = Uphone.getText().toString().trim();
-
-                reference = FirebaseDatabase.getInstance().getReference("users");
-
-                reference.child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Uphone.setError("Phone number already exists");
-                            Uphone.requestFocus();
-                        } else {
-                            UserHelperClass helperClass = new UserHelperClass(name, email, password, phone);
-                            reference.child(phone).setValue(helperClass);
-                            Toast.makeText(Register.this, "User Registered Successfully", Toast.LENGTH_LONG).show();
-
-                            // Redirect to login
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(Register.this, "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        // ── Register button ────────────────────────────────────────────────────
+        reg_btn.setOnClickListener(v -> {
+            if (!validateUsername() | !validateEmail()
+                    | !validatePassword() | !validatePhone()) return;
+            registerUser();
         });
 
-        // Go to login
-        goto_log.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-        });
+        goto_log.setOnClickListener(v ->
+                startActivity(new Intent(this, MainActivity.class)));
 
-        // Go to admin
-        goto_admin.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), Register_admin.class);
-            startActivity(intent);
-        });
+        goto_admin.setOnClickListener(v ->
+                startActivity(new Intent(this, Register_admin.class)));
     }
 
-    // Validation methods
+    // ── Registration flow ─────────────────────────────────────────────────────
+
+    private void registerUser() {
+        String name     = Uname.getText().toString().trim();
+        String email    = Uemail.getText().toString().trim();
+        String password = Upassword.getText().toString().trim();
+        String phone    = Uphone.getText().toString().trim();
+
+        // Step 1: Create Firebase Auth account (email + password)
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser == null) return;
+
+                        String uid = firebaseUser.getUid();
+
+                        // Step 2: Save profile to Realtime DB under UID
+                        // We store UID as the key so Auth UID = DB key — they are
+                        // permanently linked. Password is NOT stored in the DB;
+                        // Firebase Auth handles all authentication securely.
+                        UserHelperClass user = new UserHelperClass(name, email, "", phone);
+                        dbRef.child(uid).setValue(user)
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(this,
+                                            "Registered successfully! Please login.",
+                                            Toast.LENGTH_LONG).show();
+
+                                    // Sign out immediately — user must login through
+                                    // the proper login screen
+                                    mAuth.signOut();
+
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(this,
+                                                "Profile save failed: " + e.getMessage(),
+                                                Toast.LENGTH_SHORT).show());
+
+                    } else {
+                        // Firebase Auth error — e.g. email already exists
+                        String error = task.getException() != null
+                                ? task.getException().getMessage()
+                                : "Registration failed";
+                        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+
+                        // Highlight the email field if it's a duplicate
+                        if (error != null && error.contains("email")) {
+                            Uemail.setError("Email already registered");
+                            Uemail.requestFocus();
+                        }
+                    }
+                });
+    }
+
+    // ── Validation ─────────────────────────────────────────────────────────────
+
     private boolean validateUsername() {
         String val = Uname.getText().toString().trim();
-        String checkspaces = "\\A\\w{4,20}\\z";
-
-        if (val.isEmpty()) {
-            Uname.setError("Field cannot be empty");
-            return false;
-        } else if (val.length() > 20) {
-            Uname.setError("Username is too long");
-            return false;
-        } else if (!val.matches(checkspaces)) {
-            Uname.setError("No white spaces allowed");
-            return false;
-        } else {
-            Uname.setError(null);
-            return true;
-        }
+        if (val.isEmpty()) { Uname.setError("Field cannot be empty"); return false; }
+        if (val.length() > 20) { Uname.setError("Username is too long"); return false; }
+        if (!val.matches("\\A\\w{4,20}\\z")) {
+            Uname.setError("No white spaces allowed"); return false; }
+        Uname.setError(null);
+        return true;
     }
 
     private boolean validateEmail() {
         String val = Uemail.getText().toString().trim();
-        String checkEmail = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-        if (val.isEmpty()) {
-            Uemail.setError("Field cannot be empty");
-            return false;
-        } else if (!val.matches(checkEmail)) {
-            Uemail.setError("Invalid Email");
-            return false;
-        } else {
-            Uemail.setError(null);
-            return true;
-        }
+        if (val.isEmpty()) { Uemail.setError("Field cannot be empty"); return false; }
+        if (!val.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+            Uemail.setError("Invalid email address"); return false; }
+        Uemail.setError(null);
+        return true;
     }
 
     private boolean validatePassword() {
         String val = Upassword.getText().toString().trim();
-        String checkPassword = "^(?=.*[a-zA-Z])(?=\\S+$).{4,}$";
-
-        if (val.isEmpty()) {
-            Upassword.setError("Field cannot be empty");
-            return false;
-        } else if (!val.matches(checkPassword)) {
-            Upassword.setError("Password should be at least 4 characters and no spaces");
-            return false;
-        } else {
-            Upassword.setError(null);
-            return true;
-        }
+        if (val.isEmpty()) { Upassword.setError("Field cannot be empty"); return false; }
+        if (!val.matches("^(?=.*[a-zA-Z])(?=\\S+$).{6,}$")) {
+            Upassword.setError("Min 6 characters, at least one letter, no spaces");
+            return false; }
+        Upassword.setError(null);
+        return true;
     }
 
     private boolean validatePhone() {
         String val = Uphone.getText().toString().trim();
-        String checkspaces = "\\A\\w{4,20}\\z";
-
-        if (val.isEmpty()) {
-            Uphone.setError("Enter a valid phone number");
-            return false;
-        } else if (!val.matches(checkspaces)) {
-            Uphone.setError("No white spaces allowed");
-            return false;
-        } else {
-            Uphone.setError(null);
-            return true;
-        }
+        if (val.isEmpty()) { Uphone.setError("Enter a valid phone number"); return false; }
+        if (!val.matches("\\A\\w{4,20}\\z")) {
+            Uphone.setError("No white spaces allowed"); return false; }
+        Uphone.setError(null);
+        return true;
     }
 }
