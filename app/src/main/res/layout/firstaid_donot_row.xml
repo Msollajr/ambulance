@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- firstaid_donot_row.xml  — inflate one per do-not inside donots_container -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="8dp"
+    android:gravity="top">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✕ "
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#C0392B"
+        android:paddingTop="1dp" />
+
+    <TextView
+        android:id="@+id/tv_donot_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:textColor="#7B241C"
+        android:lineSpacingExtra="3dp"
+        android:text="Do NOT put anything in the person's mouth." />
+
+</LinearLayout>

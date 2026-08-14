@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- firstaid_step_row.xml  — inflate one per step inside steps_container -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/step_row_bg"
+    android:padding="12dp">
+
+    <!-- Step number circle -->
+    <TextView
+        android:id="@+id/tv_step_number"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/step_number_circle"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:text="1" />
+
+    <!-- Step instruction -->
+    <TextView
+        android:id="@+id/tv_step_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:textSize="14sp"
+        android:textColor="#1A1A2E"
+        android:lineSpacingExtra="3dp"
+        android:text="Check the scene is safe, then check if the person is responsive." />
+
+</LinearLayout>

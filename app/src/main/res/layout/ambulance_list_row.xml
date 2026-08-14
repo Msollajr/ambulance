@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Top row: driver name + distance chip -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/driver_avatar_bg"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚑" android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <TextView android:id="@+id/tv_amb_driver_name"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Driver Name" android:textSize="15sp"
+                    android:textStyle="bold" android:textColor="#1A1A2E" />
+                <TextView android:id="@+id/tv_amb_driver_phone"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="—" android:textSize="12sp" android:textColor="#888888"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:orientation="vertical"
+                android:gravity="end">
+                <TextView android:id="@+id/tv_amb_distance"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="0.0 km" android:textSize="14sp"
+                    android:textStyle="bold" android:textColor="#EA6D35" />
+                <TextView android:id="@+id/tv_amb_eta"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="— min" android:textSize="11sp"
+                    android:textColor="#888888" android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Info grid -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal"
+            android:background="#F7F8FA" android:padding="8dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="PLATE" android:textSize="9sp"
+                    android:textColor="#888" android:textStyle="bold" />
+                <TextView android:id="@+id/tv_amb_plate_row"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="—" android:textSize="12sp"
+                    android:textStyle="bold" android:textColor="#1A1A2E" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="TYPE" android:textSize="9sp"
+                    android:textColor="#888" android:textStyle="bold" />
+                <TextView android:id="@+id/tv_amb_type_row"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="—" android:textSize="12sp"
+                    android:textStyle="bold" android:textColor="#3B608C" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="EQUIP" android:textSize="9sp"
+                    android:textColor="#888" android:textStyle="bold" />
+                <TextView android:id="@+id/tv_amb_equip_row"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="—" android:textSize="12sp"
+                    android:textStyle="bold" android:textColor="#1A1A2E" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="COST" android:textSize="9sp"
+                    android:textColor="#888" android:textStyle="bold" />
+                <TextView android:id="@+id/tv_amb_cost_row"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="—" android:textSize="11sp"
+                    android:textStyle="bold" android:textColor="#EA6D35" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Hospital -->
+        <TextView android:id="@+id/tv_amb_hospital_row"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="🏥  Hospital" android:textSize="12sp"
+            android:textColor="#3B608C" android:layout_marginBottom="10dp" />
+
+        <!-- Request button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_request_this_amb"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:text="Request This Ambulance"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#EA6D35"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Hospital Name" android:textSize="12sp" android:textStyle="bold"
+        android:textColor="#1A1A2E" android:layout_marginBottom="4dp" />
+    <EditText android:id="@+id/et_hospital_name"
+        android:layout_width="match_parent" android:layout_height="48dp"
+        android:background="@drawable/edittext_background"
+        android:hint="e.g. Muhimbili National Hospital"
+        android:textColorHint="#AAAAAA" android:textColor="#1A1A2E"
+        android:textSize="14sp" android:padding="12dp"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="14dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Latitude *" android:textSize="12sp" android:textStyle="bold"
+        android:textColor="#1A1A2E" android:layout_marginBottom="4dp" />
+    <EditText android:id="@+id/et_hospital_lat"
+        android:layout_width="match_parent" android:layout_height="48dp"
+        android:background="@drawable/edittext_background"
+        android:hint="e.g. -6.7924"
+        android:textColorHint="#AAAAAA" android:textColor="#1A1A2E"
+        android:textSize="14sp" android:padding="12dp"
+        android:inputType="numberDecimal|numberSigned"
+        android:layout_marginBottom="14dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Longitude *" android:textSize="12sp" android:textStyle="bold"
+        android:textColor="#1A1A2E" android:layout_marginBottom="4dp" />
+    <EditText android:id="@+id/et_hospital_lng"
+        android:layout_width="match_parent" android:layout_height="48dp"
+        android:background="@drawable/edittext_background"
+        android:hint="e.g. 39.2083"
+        android:textColorHint="#AAAAAA" android:textColor="#1A1A2E"
+        android:textSize="14sp" android:padding="12dp"
+        android:inputType="numberDecimal|numberSigned"
+        android:layout_marginBottom="4dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Tip: Open Google Maps, long-press your hospital location, and copy the coordinates shown at the bottom."
+        android:textSize="11sp" android:textColor="#888888" android:lineSpacingExtra="2dp" />
+</LinearLayout>
